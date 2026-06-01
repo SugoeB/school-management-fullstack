@@ -1,0 +1,23 @@
+.subtitle {
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(240px, 1fr)
+  );
+  gap: 24px;
+}
+
+mat-card {
+  padding: 24px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+mat-card:hover {
+  transform: translateY(-4px);
+}

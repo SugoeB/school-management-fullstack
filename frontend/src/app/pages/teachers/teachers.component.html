@@ -1,0 +1,197 @@
+<section class="page-header">
+  <div>
+    <h1>Professores</h1>
+    <p>
+      Cadastre professores e associe cada um a uma escola.
+    </p>
+  </div>
+</section>
+
+<div class="content-grid">
+  <mat-card class="form-card">
+    <mat-card-title>
+      Novo Professor
+    </mat-card-title>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+
+        <input
+          matInput
+          formControlName="name"
+          placeholder="Nome do professor"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>CPF</mat-label>
+
+        <input
+          matInput
+          formControlName="cpf"
+          maxlength="11"
+          placeholder="Somente números"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          placeholder="Mínimo 6 caracteres"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de nascimento</mat-label>
+
+        <input
+          matInput
+          type="date"
+          formControlName="birthDate"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Escola</mat-label>
+
+        <mat-select formControlName="schoolId">
+          <mat-option [value]="0">
+            Selecione uma escola
+          </mat-option>
+
+          <mat-option
+            *ngFor="let school of schools"
+            [value]="school.id"
+          >
+            {{ school.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+      >
+        Salvar Professor
+      </button>
+    </form>
+  </mat-card>
+
+  <mat-card class="table-card">
+    <mat-card-title>
+      Professores cadastrados
+    </mat-card-title>
+
+    <table
+      mat-table
+      [dataSource]="teachers"
+      class="mat-elevation-z1"
+    >
+      <ng-container matColumnDef="id">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          ID
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let teacher"
+        >
+          {{ teacher.id }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          Nome
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let teacher"
+        >
+          {{ teacher.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cpf">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          CPF
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let teacher"
+        >
+          {{ teacher.cpf }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="birth_date">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          Nascimento
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let teacher"
+        >
+          {{ teacher.birth_date | date: 'dd/MM/yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="school">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          Escola
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let teacher"
+        >
+          {{ teacher.school }}
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+      ></tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+    </table>
+
+    <p
+      class="empty-message"
+      *ngIf="teachers.length === 0"
+    >
+      Nenhum professor cadastrado ainda.
+    </p>
+  </mat-card>
+</div>

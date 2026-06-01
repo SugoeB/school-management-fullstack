@@ -1,0 +1,202 @@
+<section class="page-header">
+  <div>
+    <h1>Alunos</h1>
+    <p>
+      Cadastre alunos e associe cada um a um professor.
+    </p>
+  </div>
+</section>
+
+<div class="content-grid">
+  <mat-card class="form-card">
+    <mat-card-title>
+      Novo Aluno
+    </mat-card-title>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+
+        <input
+          matInput
+          formControlName="name"
+          placeholder="Nome do aluno"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>CPF</mat-label>
+
+        <input
+          matInput
+          formControlName="cpf"
+          maxlength="11"
+          placeholder="Somente números"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de nascimento</mat-label>
+
+        <input
+          matInput
+          type="date"
+          formControlName="birthDate"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Professor</mat-label>
+
+        <mat-select formControlName="teacherId">
+          <mat-option [value]="0">
+            Selecione um professor
+          </mat-option>
+
+          <mat-option
+            *ngFor="let teacher of teachers"
+            [value]="teacher.id"
+          >
+            {{ teacher.name }} - {{ teacher.school }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+      >
+        Salvar Aluno
+      </button>
+    </form>
+  </mat-card>
+
+  <mat-card class="table-card">
+    <mat-card-title>
+      Alunos cadastrados
+    </mat-card-title>
+
+    <table
+      mat-table
+      [dataSource]="students"
+      class="mat-elevation-z1"
+    >
+      <ng-container matColumnDef="id">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          ID
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let student"
+        >
+          {{ student.id }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          Nome
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let student"
+        >
+          {{ student.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cpf">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          CPF
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let student"
+        >
+          {{ student.cpf }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="birth_date">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          Nascimento
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let student"
+        >
+          {{ student.birth_date | date: 'dd/MM/yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="teacher_name">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          Professor
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let student"
+        >
+          {{ student.teacher_name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="school_name">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+        >
+          Escola
+        </th>
+
+        <td
+          mat-cell
+          *matCellDef="let student"
+        >
+          {{ student.school_name }}
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+      ></tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+    </table>
+
+    <p
+      class="empty-message"
+      *ngIf="students.length === 0"
+    >
+      Nenhum aluno cadastrado ainda.
+    </p>
+  </mat-card>
+</div>

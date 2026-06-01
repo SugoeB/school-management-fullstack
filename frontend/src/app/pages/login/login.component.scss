@@ -1,0 +1,42 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #1e3a8a, #0f172a);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+}
+
+mat-card-title {
+  font-size: 28px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+mat-card-subtitle {
+  display: block;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.register-link {
+  margin-top: 20px;
+  text-align: center;
+
+  a {
+    font-weight: 600;
+    text-decoration: none;
+  }
+}

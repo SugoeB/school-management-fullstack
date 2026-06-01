@@ -1,0 +1,63 @@
+<mat-sidenav-container class="layout-container">
+  <mat-sidenav
+    mode="side"
+    opened
+    class="sidenav"
+  >
+    <div class="logo">
+      Gestão Escolar
+    </div>
+
+    <nav class="menu">
+      <a
+        mat-button
+        routerLink="/dashboard"
+        routerLinkActive="active"
+      >
+        Dashboard
+      </a>
+
+      <a
+        mat-button
+        routerLink="/schools"
+        routerLinkActive="active"
+      >
+        Escolas
+      </a>
+
+      <a
+        mat-button
+        routerLink="/teachers"
+        routerLinkActive="active"
+      >
+        Professores
+      </a>
+
+      <a
+        mat-button
+        routerLink="/students"
+        routerLinkActive="active"
+      >
+        Alunos
+      </a>
+    </nav>
+
+    <button
+      mat-button
+      class="logout"
+      (click)="logout()"
+    >
+      Sair
+    </button>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span>Sistema de Gestão Escolar</span>
+    </mat-toolbar>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

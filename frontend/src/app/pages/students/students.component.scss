@@ -1,0 +1,52 @@
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+  }
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 390px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+mat-card {
+  padding: 24px;
+}
+
+mat-card-title {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.empty-message {
+  margin-top: 16px;
+  color: #777;
+  text-align: center;
+}
+
+@media (max-width: 1000px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
