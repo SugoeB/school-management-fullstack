@@ -30,6 +30,13 @@ import {
   TeacherService,
 } from '../../core/services/teacher.service';
 
+import {
+  birthDateValidator,
+  cpfMask,
+  onlyCpfNumbers,
+  onlyLettersValidator,
+} from '../../core/utils/form-validators';
+
 @Component({
   selector: 'app-teachers',
   standalone: true,
@@ -68,6 +75,7 @@ export class TeachersComponent implements OnInit {
       '',
       [
         Validators.required,
+        onlyLettersValidator(),
       ],
     ],
 
@@ -75,8 +83,8 @@ export class TeachersComponent implements OnInit {
       '',
       [
         Validators.required,
-        Validators.minLength(11),
-        Validators.maxLength(11),
+        Validators.minLength(14),
+        Validators.maxLength(14),
       ],
     ],
 
@@ -92,6 +100,7 @@ export class TeachersComponent implements OnInit {
       '',
       [
         Validators.required,
+        birthDateValidator(18, 100),
       ],
     ],
 
@@ -107,6 +116,28 @@ export class TeachersComponent implements OnInit {
   ngOnInit(): void {
     this.loadSchools();
     this.loadTeachers();
+  }
+
+  onCpfInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const maskedCpf = cpfMask(input.value);
+
+    input.value = maskedCpf;
+
+    this.form.controls.cpf.setValue(maskedCpf, {
+      emitEvent: false,
+    });
+  }
+
+  onNameInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const onlyLetters = input.value.replace(/[0-9]/g, '');
+
+    input.value = onlyLetters;
+
+    this.form.controls.name.setValue(onlyLetters, {
+      emitEvent: false,
+    });
   }
 
   loadSchools(): void {
@@ -152,8 +183,15 @@ export class TeachersComponent implements OnInit {
       return;
     }
 
-    const data: CreateTeacherRequest =
-      this.form.getRawValue();
+    const rawData = this.form.getRawValue();
+
+    const data: CreateTeacherRequest = {
+      name: rawData.name,
+      cpf: onlyCpfNumbers(rawData.cpf),
+      password: rawData.password,
+      birthDate: rawData.birthDate,
+      schoolId: rawData.schoolId,
+    };
 
     this.teacherService.create(data).subscribe({
       next: () => {

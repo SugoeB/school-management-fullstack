@@ -24,7 +24,16 @@
           matInput
           formControlName="name"
           placeholder="Nome do aluno"
+          (input)="onNameInput($event)"
         />
+
+        <mat-error *ngIf="form.controls.name.hasError('required')">
+          Nome é obrigatório.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.name.hasError('onlyLetters')">
+          Nome não pode conter números.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -33,9 +42,23 @@
         <input
           matInput
           formControlName="cpf"
-          maxlength="11"
-          placeholder="Somente números"
+          maxlength="14"
+          placeholder="000.000.000-00"
+          (input)="onCpfInput($event)"
         />
+
+        <mat-error *ngIf="form.controls.cpf.hasError('required')">
+          CPF é obrigatório.
+        </mat-error>
+
+        <mat-error
+          *ngIf="
+            form.controls.cpf.hasError('minlength') ||
+            form.controls.cpf.hasError('maxlength')
+          "
+        >
+          CPF deve conter 11 números.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -46,6 +69,18 @@
           type="date"
           formControlName="birthDate"
         />
+
+        <mat-error *ngIf="form.controls.birthDate.hasError('required')">
+          Data de nascimento é obrigatória.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.birthDate.hasError('futureDate')">
+          Data não pode ser maior que hoje.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.birthDate.hasError('maxAge')">
+          Aluno deve ter no máximo 100 anos.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -63,6 +98,10 @@
             {{ teacher.name }} - {{ teacher.school }}
           </mat-option>
         </mat-select>
+
+        <mat-error *ngIf="form.controls.teacherId.hasError('min')">
+          Selecione um professor.
+        </mat-error>
       </mat-form-field>
 
       <button
@@ -86,97 +125,61 @@
       class="mat-elevation-z1"
     >
       <ng-container matColumnDef="id">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
+        <th mat-header-cell *matHeaderCellDef>
           ID
         </th>
 
-        <td
-          mat-cell
-          *matCellDef="let student"
-        >
+        <td mat-cell *matCellDef="let student">
           {{ student.id }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
+        <th mat-header-cell *matHeaderCellDef>
           Nome
         </th>
 
-        <td
-          mat-cell
-          *matCellDef="let student"
-        >
+        <td mat-cell *matCellDef="let student">
           {{ student.name }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="cpf">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
+        <th mat-header-cell *matHeaderCellDef>
           CPF
         </th>
 
-        <td
-          mat-cell
-          *matCellDef="let student"
-        >
+        <td mat-cell *matCellDef="let student">
           {{ student.cpf }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="birth_date">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
+        <th mat-header-cell *matHeaderCellDef>
           Nascimento
         </th>
 
-        <td
-          mat-cell
-          *matCellDef="let student"
-        >
+        <td mat-cell *matCellDef="let student">
           {{ student.birth_date | date: 'dd/MM/yyyy' }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="teacher_name">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
+        <th mat-header-cell *matHeaderCellDef>
           Professor
         </th>
 
-        <td
-          mat-cell
-          *matCellDef="let student"
-        >
+        <td mat-cell *matCellDef="let student">
           {{ student.teacher_name }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="school_name">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-        >
+        <th mat-header-cell *matHeaderCellDef>
           Escola
         </th>
 
-        <td
-          mat-cell
-          *matCellDef="let student"
-        >
+        <td mat-cell *matCellDef="let student">
           {{ student.school_name }}
         </td>
       </ng-container>

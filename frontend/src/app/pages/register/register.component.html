@@ -18,7 +18,17 @@
         <input
           matInput
           formControlName="name"
+          placeholder="Digite seu nome"
+          (input)="onNameInput($event)"
         />
+
+        <mat-error *ngIf="form.controls.name.hasError('required')">
+          Nome é obrigatório.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.name.hasError('onlyLetters')">
+          Nome não pode conter números.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -27,9 +37,23 @@
         <input
           matInput
           formControlName="cpf"
-          maxlength="11"
-          placeholder="Somente números"
+          maxlength="14"
+          placeholder="000.000.000-00"
+          (input)="onCpfInput($event)"
         />
+
+        <mat-error *ngIf="form.controls.cpf.hasError('required')">
+          CPF é obrigatório.
+        </mat-error>
+
+        <mat-error
+          *ngIf="
+            form.controls.cpf.hasError('minlength') ||
+            form.controls.cpf.hasError('maxlength')
+          "
+        >
+          CPF deve conter 11 números.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -40,6 +64,14 @@
           type="password"
           formControlName="password"
         />
+
+        <mat-error *ngIf="form.controls.password.hasError('required')">
+          Senha é obrigatória.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.password.hasError('minlength')">
+          Senha deve ter no mínimo 6 caracteres.
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -50,6 +82,22 @@
           type="date"
           formControlName="birthDate"
         />
+
+        <mat-error *ngIf="form.controls.birthDate.hasError('required')">
+          Data de nascimento é obrigatória.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.birthDate.hasError('futureDate')">
+          Data não pode ser maior que hoje.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.birthDate.hasError('minAge')">
+          Usuário deve ter no mínimo 18 anos.
+        </mat-error>
+
+        <mat-error *ngIf="form.controls.birthDate.hasError('maxAge')">
+          Usuário deve ter no máximo 100 anos.
+        </mat-error>
       </mat-form-field>
 
       <button

@@ -19,11 +19,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
       ignoreExpiration: false,
 
-      // Aqui garantimos que sempre será string, não undefined.
       secretOrKey: configService.getOrThrow<string>('JWT_SECRET'),
     });
   }
 
+  // O objeto retornado por validate será anexado em req.user
+  // nas rotas protegidas pelo JwtAuthGuard.
   validate(payload: JwtPayload) {
     return {
       userId: payload.sub,

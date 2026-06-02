@@ -26,6 +26,13 @@ import {
   RegisterRequest,
 } from '../../core/services/auth.service';
 
+import {
+  birthDateValidator,
+  cpfMask,
+  onlyCpfNumbers,
+  onlyLettersValidator,
+} from '../../core/utils/form-validators';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -48,14 +55,20 @@ export class RegisterComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   form = this.fb.group({
-    name: ['', Validators.required],
+    name: [
+      '',
+      [
+        Validators.required,
+        onlyLettersValidator(),
+      ],
+    ],
 
     cpf: [
       '',
       [
         Validators.required,
-        Validators.minLength(11),
-        Validators.maxLength(11),
+        Validators.minLength(14),
+        Validators.maxLength(14),
       ],
     ],
 
@@ -67,8 +80,30 @@ export class RegisterComponent {
       ],
     ],
 
-    birthDate: ['', Validators.required],
+    birthDate: [
+      '',
+      [
+        Validators.required,
+        birthDateValidator(18, 100),
+      ],
+    ],
   });
+
+  onCpfInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const maskedCpf = cpfMask(input.value);
+
+    input.value = maskedCpf;
+    this.form.controls.cpf.setValue(maskedCpf);
+  }
+
+  onNameInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const onlyLetters = input.value.replace(/[0-9]/g, '');
+
+    input.value = onlyLetters;
+    this.form.controls.name.setValue(onlyLetters);
+  }
 
   submit(): void {
     if (this.form.invalid) {
@@ -81,7 +116,14 @@ export class RegisterComponent {
       return;
     }
 
-    const data: RegisterRequest = this.form.getRawValue();
+    const rawData = this.form.getRawValue();
+
+    const data: RegisterRequest = {
+      name: rawData.name,
+      cpf: onlyCpfNumbers(rawData.cpf),
+      password: rawData.password,
+      birthDate: rawData.birthDate,
+    };
 
     this.authService.register(data).subscribe({
       next: () => {

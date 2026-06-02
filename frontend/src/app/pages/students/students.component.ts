@@ -30,6 +30,13 @@ import {
   StudentService,
 } from '../../core/services/student.service';
 
+import {
+  birthDateValidator,
+  cpfMask,
+  onlyCpfNumbers,
+  onlyLettersValidator,
+} from '../../core/utils/form-validators';
+
 @Component({
   selector: 'app-students',
   standalone: true,
@@ -69,6 +76,7 @@ export class StudentsComponent implements OnInit {
       '',
       [
         Validators.required,
+        onlyLettersValidator(),
       ],
     ],
 
@@ -76,8 +84,8 @@ export class StudentsComponent implements OnInit {
       '',
       [
         Validators.required,
-        Validators.minLength(11),
-        Validators.maxLength(11),
+        Validators.minLength(14),
+        Validators.maxLength(14),
       ],
     ],
 
@@ -85,6 +93,7 @@ export class StudentsComponent implements OnInit {
       '',
       [
         Validators.required,
+        birthDateValidator(0, 100),
       ],
     ],
 
@@ -100,6 +109,28 @@ export class StudentsComponent implements OnInit {
   ngOnInit(): void {
     this.loadTeachers();
     this.loadStudents();
+  }
+
+  onCpfInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const maskedCpf = cpfMask(input.value);
+
+    input.value = maskedCpf;
+
+    this.form.controls.cpf.setValue(maskedCpf, {
+      emitEvent: false,
+    });
+  }
+
+  onNameInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const onlyLetters = input.value.replace(/[0-9]/g, '');
+
+    input.value = onlyLetters;
+
+    this.form.controls.name.setValue(onlyLetters, {
+      emitEvent: false,
+    });
   }
 
   loadTeachers(): void {
@@ -145,8 +176,14 @@ export class StudentsComponent implements OnInit {
       return;
     }
 
-    const data: CreateStudentRequest =
-      this.form.getRawValue();
+    const rawData = this.form.getRawValue();
+
+    const data: CreateStudentRequest = {
+      name: rawData.name,
+      cpf: onlyCpfNumbers(rawData.cpf),
+      birthDate: rawData.birthDate,
+      teacherId: rawData.teacherId,
+    };
 
     this.studentService.create(data).subscribe({
       next: () => {

@@ -26,6 +26,11 @@ import {
   LoginResponse,
 } from '../../core/services/auth.service';
 
+import {
+  cpfMask,
+  onlyCpfNumbers,
+} from '../../core/utils/form-validators';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -52,8 +57,8 @@ export class LoginComponent {
       '',
       [
         Validators.required,
-        Validators.minLength(11),
-        Validators.maxLength(11),
+        Validators.minLength(14),
+        Validators.maxLength(14),
       ],
     ],
 
@@ -64,6 +69,14 @@ export class LoginComponent {
       ],
     ],
   });
+
+  onCpfInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const maskedCpf = cpfMask(input.value);
+
+    input.value = maskedCpf;
+    this.form.controls.cpf.setValue(maskedCpf);
+  }
 
   submit(): void {
     if (this.form.invalid) {
@@ -76,8 +89,13 @@ export class LoginComponent {
       return;
     }
 
+    const rawData = this.form.getRawValue();
+
     this.authService
-      .login(this.form.getRawValue())
+      .login({
+        cpf: onlyCpfNumbers(rawData.cpf),
+        password: rawData.password,
+      })
       .subscribe({
         next: (response: LoginResponse) => {
           this.authService.saveSession(response);
